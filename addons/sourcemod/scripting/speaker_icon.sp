@@ -57,7 +57,7 @@ enum struct Player
 
     void RemoveSpeakerIcon()
     {
-        if (this.speaker_icon_ent_ref == INVALID_ENT_REFERENCE)
+        if (!this.speaker_icon_ent_ref || this.speaker_icon_ent_ref == INVALID_ENT_REFERENCE)
         {
             return;
         }
@@ -65,8 +65,6 @@ enum struct Player
         int entity = EntRefToEntIndex(this.speaker_icon_ent_ref);
         if (entity != -1)
         {
-            PrintToConsoleAll("[RemoveSpeakerIcon] %d", this.index);
-
             RemoveEdict(entity);
         }
 
@@ -134,7 +132,7 @@ void Event_PlayerDeath(Event event, const char[] name, bool dontBroadcast)
 
 public void OnClientSpeaking(int client)
 {
-    if (IsPlayerAlive(client))
+    if (IsClientInGame(client) && IsPlayerAlive(client))
     {
         g_Players[client].CreateSpeakerIcon();
     }
